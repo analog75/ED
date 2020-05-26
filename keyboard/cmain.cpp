@@ -20,9 +20,9 @@
 #include <string.h>
 #include <math.h>
 //#include <boost/chrono.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/random.hpp>
-#include <boost/smart_ptr.hpp> 
+//#include <boost/lexical_cast.hpp>
+//#include <boost/random.hpp>
+//#include <boost/smart_ptr.hpp> 
 
 #include "define.h"
 #include "edit_distance.hpp"
@@ -85,20 +85,13 @@ void evaluate_seq(Option& _parameter)
   unsigned int length_pattern = static_cast<unsigned int>(strlen(pattern));
   unsigned int length_input   = static_cast<unsigned int>(strlen(input));
 
-  unsigned int **dist_array = (unsigned int **)malloc((length_input + 1) * sizeof(unsigned int*));
+  float **dist_array = (float **)malloc((length_input + 1) * sizeof(float*));
   
   for (unsigned int i=0; i<length_input + 1; i++)
-    dist_array[i] = (unsigned int *)malloc((length_pattern + 1) * sizeof(unsigned int ));
+    dist_array[i] = (float*)malloc((length_pattern + 1) * sizeof(float));
 
   auto start_time = std::chrono::high_resolution_clock::now();
   // row: pattern, column: input 
-#ifndef DEBUG
-  // debug
-  std::cout << "input: " << input << ", pattern: " << pattern << std::endl;
-  std::cout << "length_input: " << length_input << ", length_pattern: " << length_pattern << std::endl;
-  int temp;
-  scanf("%d", &temp);
-#endif
 
   edit_distance(input, pattern, length_input, length_pattern, dist_array);
   
@@ -118,10 +111,40 @@ void evaluate_seq(Option& _parameter)
                << dist_array[length_input][length_pattern] << ", " 
                << elapsed_time.count()
                << "\n";
+
+#ifdef DEBUG
+
+  summary_file << std::setw(6) << " "; 
+  summary_file << std::setw(6) << " "; 
+  for (int i=0; i < length_pattern; i++)
+    summary_file << std::setw(6) << std::right << str_pattern[i]; 
+  
+  summary_file << "\n";
+
+  for (int i=0; i < length_input+1; i++)
+  {
+    for (int j=0; j < length_pattern+2; j++)
+    {
+      if ((i==0) && (j==0))
+        summary_file << std::setw(6) << " "; 
+      else if (j==0)
+        summary_file << std::setw(6) << str_input[i-1]; 
+      else
+      {
+        summary_file << std::setw(5) << std::setprecision(2) 
+          << std::fixed << dist_array[i][j-1] << "/"; 
+      }
+    }
+    summary_file << "\n";
+  }
+          
+#endif
   
   free(pattern);
   free(input);
   free(dist_array);
+
+
   
   return;
  } // end of void evaluate_seq(Option& _parameter)
@@ -162,10 +185,10 @@ void evaluate_seq_diag(Option& _parameter)
   unsigned int length_pattern = static_cast<unsigned int>(strlen(pattern));
   unsigned int length_input   = static_cast<unsigned int>(strlen(input));
 
-  unsigned int **dist_array = (unsigned int **)malloc((length_input + 1) * sizeof(unsigned int*));
+  float **dist_array = (float **)malloc((length_input + 1) * sizeof(float*));
   
   for (unsigned int i=0; i<length_input + 1; i++)
-    dist_array[i] = (unsigned int*)malloc((length_pattern + 1) * sizeof(unsigned int));
+    dist_array[i] = (float*)malloc((length_pattern + 1) * sizeof(float));
 
   auto start_time = std::chrono::high_resolution_clock::now();
   // row: pattern, column: input 
@@ -230,10 +253,10 @@ void evaluate_seq_diag_pruning(Option& _parameter)
   unsigned int length_pattern = static_cast<unsigned int>(strlen(pattern));
   unsigned int length_input   = static_cast<unsigned int>(strlen(input));
 
-  unsigned int **dist_array = (unsigned int **)malloc((length_input + 1) * sizeof(unsigned int*));
+  float **dist_array = (float **)malloc((length_input + 1) * sizeof(float*));
   
   for (unsigned int i=0; i<length_input + 1; i++)
-    dist_array[i] = (unsigned int *)malloc((length_pattern + 1) * sizeof(unsigned int ));
+    dist_array[i] = (float*)malloc((length_pattern + 1) * sizeof(float));
 
   auto start_time = std::chrono::high_resolution_clock::now();
   // row: pattern, column: input 
@@ -300,10 +323,10 @@ void evaluate_seq_diag_pruning_bit(Option& _parameter)
   unsigned int length_pattern = static_cast<unsigned int>(strlen(pattern));
   unsigned int length_input   = static_cast<unsigned int>(strlen(input));
 
-  unsigned int **dist_array = (unsigned int **)malloc((length_input + 1) * sizeof(unsigned int*));
+  float **dist_array = (float **)malloc((length_input + 1) * sizeof(float*));
   
   for (unsigned int i=0; i<length_input + 1; i++)
-    dist_array[i] = (unsigned int *)malloc((length_pattern + 1) * sizeof(unsigned int ));
+    dist_array[i] = (float*)malloc((length_pattern + 1) * sizeof(float));
 
   auto start_time = std::chrono::high_resolution_clock::now();
   // row: pattern, column: input 
@@ -325,6 +348,36 @@ void evaluate_seq_diag_pruning_bit(Option& _parameter)
                << elapsed_time.count()
                << "\n";
 
+#ifdef DEBUG
+
+  summary_file << std::setw(6) << " "; 
+  summary_file << std::setw(6) << " "; 
+  for (int i=0; i < length_pattern; i++)
+    summary_file << std::setw(6) << std::right << str_pattern[i]; 
+  
+  summary_file << "\n";
+
+  for (int i=0; i < length_input+1; i++)
+  {
+    for (int j=0; j < length_pattern+2; j++)
+    {
+      if ((i==0) && (j==0))
+        summary_file << std::setw(6) << " "; 
+      else if (j==0)
+        summary_file << std::setw(6) << str_input[i-1]; 
+      else
+      {
+        summary_file << std::setw(5) << std::setprecision(2) 
+          << std::fixed << dist_array[i][j-1] << "/"; 
+      }
+    }
+    summary_file << "\n";
+  }
+          
+#endif
+
+
+
   free(pattern);
   free(input);
   free(dist_array);
@@ -334,7 +387,6 @@ void evaluate_seq_diag_pruning_bit(Option& _parameter)
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-
 
 
 
