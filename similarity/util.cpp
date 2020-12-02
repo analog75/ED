@@ -2,10 +2,6 @@
 *   Title      : util.cpp
 *   Desc       : ASM (approximate string matching) util
 *   Author     : HyunJin Kim
-*   Ver        : 2018.02.26 - 0.1
-*                2018.04.13 - 0.2 Diagonal mode is added
-*                2018.04.14 - 0.3 Zigzag mode is added
-*                2018.04.15 - 0.4 Pruning mode is added
 *   Description: These utils are used in overall area of this program 
 *       
 ****************************************************************************/
@@ -64,14 +60,6 @@ void Option::set_option(const int _argc, char* const* _argv)
           this->mode = DIAGONAL;
         else if (what_mode == "pruning")
           this->mode = DIAGONAL_PRUNGING;
-        else if (what_mode == "pruning_bit")
-          this->mode = DIAGONAL_PRUNGING_BIT;
-//        else if (what_mode == "diagonalp")
-//          this->mode = DIAGONALP;
-//        else if (what_mode == "seqp")
-//          this->mode = SEQP;
-//        else if (what_mode == "zigzagp")
-//          this->mode = ZIGZAGP;
         break;
 
       case 'n':

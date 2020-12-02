@@ -3,10 +3,6 @@
 *   Desc       : edit distance declaration
 *
 *   Author     : HyunJin Kim
-*   Ver        : 2018.02.28 - 0.1
-*                2018.04.13 - 0.2: diagonal mode is added.
-*                2018.04.14 - 0.3: zigzag mode is added.
-*                2019.01.12 - 0.4: normalized edit distance mode is added.
 *   Description: This is declaration of sequential dynamic programing 
 *                for approximate string matching.
 *
@@ -25,18 +21,15 @@ extern float DIST_NORM;
 extern float DIST_ARRAY[26][26]; 
 
 float edit_distance(char* str1, char* str2, 
-                    unsigned int len1, unsigned int len2, 
-                    float **d);
+                    unsigned int len1, unsigned int len2, float **d,
+                    std::chrono::nanoseconds *elapsed_time);
 
 float edit_distance_diag(char* str1, char* str2, 
-                         unsigned int len1, unsigned int len2, 
-                         float **d);
+                         unsigned int len1, unsigned int len2, float **d,
+                         std::chrono::nanoseconds *elapsed_time);
 
 float edit_distance_diag_pruning(char* str1, char* str2, 
-                                 unsigned int len1, unsigned int len2, float k,
-                                 float **d);
+                                 unsigned int len1, unsigned int len2, float k, 
+                                 float **d, std::chrono::nanoseconds *elapsed_time);
 
-float edit_distance_diag_pruning_bit(char* str1, char* str2, 
-                                     unsigned int len1, unsigned int len2, float k,
-                                     float **d);
 #endif

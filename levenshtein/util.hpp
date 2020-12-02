@@ -2,8 +2,6 @@
 *   Title      : util.hpp
 *   Desc       : ASM (approximate string matching) util
 *   Author     : HyunJin Kim
-*   Ver        : 2018.02.26 - 0.1
-*   Ver        : 2019.01.12 - 0.2
 *   Description: These utils are used in overall area of this program 
 *       
 ****************************************************************************/
@@ -29,7 +27,7 @@ class Option
     unsigned int                         index;
 
     // k mismatch 
-    float                                k;
+    unsigned int                         k;
 
     // output filename
     std::string                          output_filename; 
@@ -63,7 +61,7 @@ class Option
     MODE_TYPE                            Get_mode()  
     { return this->mode; } 
 
-    float                                Get_k()  
+    unsigned int                         Get_k()  
     { return this->k; } 
 
     std::string                          Get_output_filename() 
